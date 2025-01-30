@@ -1,7 +1,8 @@
 -- Serviços
 local Players = game:GetService("Players")
-
+local UserInputService = game:GetService("UserInputService")
 local localPlayer = Players.LocalPlayer
+local Mouse = localPlayer:GetMouse()
 
 -- UI Setup
 local ScreenGui = Instance.new("ScreenGui")
@@ -10,7 +11,7 @@ local Title = Instance.new("TextLabel")
 local TextBox = Instance.new("TextBox")
 local TeleportButton = Instance.new("TextButton")
 local HitboxButton = Instance.new("TextButton")
-local ESPButton = Instance.new("TextButton") -- Novo botão ESP
+local ESPButton = Instance.new("TextButton")
 
 -- Configurando a interface
 ScreenGui.Name = "CLHHubUI"
@@ -25,7 +26,7 @@ MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.BackgroundTransparency = 0.2
 MainFrame.Active = true
-MainFrame.Draggable = true  -- O painel pode ser arrastado
+MainFrame.Draggable = true  -- Painel arrastável
 
 Title.Name = "Title"
 Title.Parent = MainFrame
@@ -98,6 +99,19 @@ local function teleportToPlayer(targetName)
         warn("Jogador não encontrado ou inválido!")
     end
 end
+
+-- Teleporte ao clicar em um jogador
+local function onPlayerClick()
+    local target = Mouse.Target
+    if target and target.Parent then
+        local targetPlayer = Players:GetPlayerFromCharacter(target.Parent)
+        if targetPlayer and targetPlayer ~= localPlayer then
+            teleportToPlayer(targetPlayer.Name)
+        end
+    end
+end
+
+Mouse.Button1Down:Connect(onPlayerClick)
 
 -- Sistema de ESP
 local function createESP(player)
