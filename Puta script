@@ -1,0 +1,135 @@
+-- Serviços
+local Players = game:GetService("Players")
+
+local localPlayer = Players.LocalPlayer
+
+-- UI Setup
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local TextBox = Instance.new("TextBox")
+local TeleportButton = Instance.new("TextButton")
+local HitboxButton = Instance.new("TextButton")
+local ESPButton = Instance.new("TextButton") -- Novo botão ESP
+
+-- Configurando a interface
+ScreenGui.Name = "CLHHubUI"
+ScreenGui.Parent = localPlayer:WaitForChild("PlayerGui")
+
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Size = UDim2.new(0, 300, 0, 250)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundTransparency = 0.2
+MainFrame.Active = true
+MainFrame.Draggable = true  -- O painel pode ser arrastado
+
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Title.BackgroundTransparency = 0.8
+Title.BorderSizePixel = 0
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "Made BY CLH Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 20
+Title.TextScaled = true
+
+TextBox.Name = "NicknameBox"
+TextBox.Parent = MainFrame
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+TextBox.BorderSizePixel = 0
+TextBox.Size = UDim2.new(0.8, 0, 0, 40)
+TextBox.Position = UDim2.new(0.1, 0, 0.25, 0)
+TextBox.Font = Enum.Font.Gotham
+TextBox.PlaceholderText = "Digite o nickname"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextBox.TextSize = 16
+TextBox.TextScaled = true
+
+TeleportButton.Name = "TeleportButton"
+TeleportButton.Parent = MainFrame
+TeleportButton.BackgroundColor3 = Color3.fromRGB(0, 120, 215)
+TeleportButton.BorderSizePixel = 0
+TeleportButton.Size = UDim2.new(0.8, 0, 0, 40)
+TeleportButton.Position = UDim2.new(0.1, 0, 0.42, 0)
+TeleportButton.Font = Enum.Font.GothamBold
+TeleportButton.Text = "Teleportar para jogador"
+TeleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeleportButton.TextSize = 16
+TeleportButton.TextScaled = true
+
+HitboxButton.Name = "HitboxButton"
+HitboxButton.Parent = MainFrame
+HitboxButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+HitboxButton.BorderSizePixel = 0
+HitboxButton.Size = UDim2.new(0.8, 0, 0, 40)
+HitboxButton.Position = UDim2.new(0.1, 0, 0.59, 0)
+HitboxButton.Font = Enum.Font.GothamBold
+HitboxButton.Text = "HITBOX"
+HitboxButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitboxButton.TextSize = 16
+HitboxButton.TextScaled = true
+
+ESPButton.Name = "ESPButton"
+ESPButton.Parent = MainFrame
+ESPButton.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+ESPButton.BorderSizePixel = 0
+ESPButton.Size = UDim2.new(0.8, 0, 0, 40)
+ESPButton.Position = UDim2.new(0.1, 0, 0.76, 0)
+ESPButton.Font = Enum.Font.GothamBold
+ESPButton.Text = "ESP"
+ESPButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ESPButton.TextSize = 16
+ESPButton.TextScaled = true
+
+-- Sistema de teleporte
+local function teleportToPlayer(targetName)
+    local targetPlayer = Players:FindFirstChild(targetName)
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+        localPlayer.Character:MoveTo(targetPosition)
+    else
+        warn("Jogador não encontrado ou inválido!")
+    end
+end
+
+-- Sistema de ESP
+local function createESP(player)
+    if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+        local highlight = Instance.new("Highlight")
+        highlight.Name = "ESPHighlight"
+        highlight.Parent = player.Character
+        highlight.FillColor = Color3.fromRGB(255, 0, 0) -- Vermelho
+        highlight.OutlineColor = Color3.fromRGB(0, 0, 0) -- Preto
+        highlight.FillTransparency = 0.5
+        highlight.OutlineTransparency = 0
+    end
+end
+
+local function activateESP()
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= localPlayer then
+            createESP(player)
+        end
+    end
+end
+
+-- Eventos do GUI
+TeleportButton.MouseButton1Click:Connect(function()
+    local targetName = TextBox.Text
+    teleportToPlayer(targetName)
+end)
+
+HitboxButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet("https://pastefy.app/b7rsxjzZ/raw"))()
+end)
+
+ESPButton.MouseButton1Click:Connect(function()
+    activateESP()
+end)
